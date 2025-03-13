@@ -1,1 +1,5 @@
-# data-parameter
+# DATA PARAMETER
+Required
+Golang
+Gin
+GORM
