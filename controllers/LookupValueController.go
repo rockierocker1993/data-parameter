@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"data-parameter/models"
 	"data-parameter/services"
 	"net/http"
 	"strconv"
@@ -10,6 +9,7 @@ import (
 )
 
 func GetAllLookupValue(c *gin.Context) {
+	//log.Println(constant.Test)
 	lookupValues, err := services.GetAllLookupValue()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get lookup value"})
@@ -19,17 +19,7 @@ func GetAllLookupValue(c *gin.Context) {
 }
 
 func CreateLookupValue(c *gin.Context) {
-	var lookupValue models.LookupValue
-	if err := c.ShouldBindJSON(&lookupValue); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	err := services.CreateLookupValue(&lookupValue)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create lookup value"})
-		return
-	}
-	c.JSON(http.StatusCreated, lookupValue)
+	services.CreateLookupValue(c)
 }
 
 func GetLookupValueByID(c *gin.Context) {

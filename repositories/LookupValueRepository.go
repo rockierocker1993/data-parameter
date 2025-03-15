@@ -25,6 +25,15 @@ func GetLookupValueByID(id uint) (*models.LookupValue, error) {
 	return &lookupValue, nil
 }
 
+func GetLookupValueByKey(key string) (*models.LookupValue, error) {
+	var lookupValue models.LookupValue
+	result := config.DB.First(&lookupValue, "key = ?", key)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &lookupValue, nil
+}
+
 func UpdateLookupValue(lookupValue *models.LookupValue) error {
 	result := config.DB.Save(lookupValue)
 	return result.Error

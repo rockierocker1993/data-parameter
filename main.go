@@ -13,7 +13,6 @@ func main() {
 	godotenv.Load(".env-local")
 	config.ConnectDatabase()
 	config.DB.AutoMigrate(&models.LookupValue{})
-
 	r := routes.SetupRouter()
 	r.Run(os.Getenv("APP_PORT"))
 }

@@ -6,7 +6,7 @@ import (
 
 type LookupValue struct {
 	gorm.Model
-	ID     uint `gorm:"primaryKey;autoIncrement" json:"id"`
+	ID     uint `gorm:"primaryKey;autoIncrement"`
 	Key    string
 	Value  string
 	TextId string
