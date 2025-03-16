@@ -2,6 +2,7 @@ package routes
 
 import (
 	"data-parameter/controllers"
+	"data-parameter/middleware"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,8 @@ import (
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+	// Gunakan middleware Request ID
+	r.Use(middleware.RequestIDMiddleware())
 	constextPath := os.Getenv("CONTEXT_PATH")
 	api := r.Group(constextPath)
 	{

@@ -2,7 +2,9 @@ package main
 
 import (
 	"data-parameter/config"
-	"data-parameter/models"
+	"log/slog"
+
+	//"data-parameter/models"
 	"data-parameter/routes"
 	"os"
 
@@ -11,8 +13,12 @@ import (
 
 func main() {
 	godotenv.Load(".env-local")
+
+	logger := slog.New(config.LogHandler{})
+	slog.SetDefault(logger)
+
 	config.ConnectDatabase()
-	config.DB.AutoMigrate(&models.LookupValue{})
+	//config.DB.AutoMigrate(&models.LookupValue{})
 	r := routes.SetupRouter()
 	r.Run(os.Getenv("APP_PORT"))
 }

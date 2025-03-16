@@ -7,13 +7,14 @@ import (
 	"data-parameter/repositories"
 	"data-parameter/util"
 	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetAllLookupValue() ([]dto.LookupValueDto, error) {
-	log.Println("in method GetAllLookupValue")
+	slog.Info("in method GetAllLookupValue")
 	lookupValues, err := repositories.GetAllLookupValues()
 	var dtoList []dto.LookupValueDto
 	if err == nil {
@@ -25,30 +26,21 @@ func GetAllLookupValue() ([]dto.LookupValueDto, error) {
 }
 
 func CreateLookupValue(c *gin.Context) {
-	log.Println("in method CreateLookupValue")
+	slog.Info("in method CreateLookupValue")
 
 	var lookupValueDto dto.LookupValueDto
 	if err := c.ShouldBindJSON(&lookupValueDto); err != nil {
 		util.JSONResponse(c, http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	log.Println("body {}", lookupValueDto)
+	slog.Info("Request Body", slog.Any("body", lookupValueDto))
 	lookupValue := ToLookupValueModel(&lookupValueDto)
 
 	//cek existing key
 	lookupValueExist, _ := repositories.GetLookupValueByKey(lookupValue.Key)
 	if lookupValueExist != nil {
-		log.Println("Lookup value with key {} already exist", lookupValue.Key)
-		baseResponse := dto.BaseResponse{
-			Status:    "failed",
-			RequestID: "123",
-			TitleID:   "Gagal",
-			TitleEN:   "Failed",
-			DescID:    "Lookup value dengan key " + lookupValue.Key + " sudah ada",
-			DescEN:    "Lookup value with key " + lookupValue.Key + " already exist",
-			Source:    constant.Source,
-			Data:      nil,
-		}
+		log.Printf("Lookup value with key %v already exist", lookupValue.Key)
+		baseResponse := util.ConstructResponse(c, "PRMLV01", constant.Source, nil)
 		c.JSON(http.StatusBadRequest, baseResponse)
 		return
 	}
@@ -56,31 +48,13 @@ func CreateLookupValue(c *gin.Context) {
 	//create lookup value
 	err := repositories.CreateLookupValue(&lookupValue)
 	if err != nil {
-		log.Fatal("Failed to create lookup value, error: {}", err)
-		baseResponse := dto.BaseResponse{
-			Status:    "failed",
-			RequestID: "123",
-			TitleID:   "Gagal",
-			TitleEN:   "Failed",
-			DescID:    "Lookup value gagal dibuat",
-			DescEN:    "Lookup value failed to create",
-			Source:    constant.Source,
-			Data:      nil,
-		}
+		slog.Error("Failed to create lookup value", slog.Any("error", lookupValueDto))
+		baseResponse := util.ConstructResponse(c, "PRMLV01", constant.Source, nil)
 		c.JSON(http.StatusInternalServerError, baseResponse)
 	} else {
-		log.Println("Lookup value created successfully")
+		slog.Info("Lookup value created successfully")
 		lookupValueDto.ID = lookupValue.ID
-		baseResponse := dto.BaseResponse{
-			Status:    "success",
-			RequestID: "123",
-			TitleID:   "Sukses",
-			TitleEN:   "Success",
-			DescID:    "Lookup value berhasil dibuat",
-			DescEN:    "Lookup value created successfully",
-			Source:    constant.Source,
-			Data:      lookupValueDto,
-		}
+		baseResponse := util.ConstructResponse(c, constant.Success, constant.General, lookupValueDto)
 		c.JSON(http.StatusBadRequest, baseResponse)
 	}
 }
