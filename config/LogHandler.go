@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+	"data-parameter/constant"
 	"fmt"
 	"log/slog"
 	"os"
@@ -29,7 +30,7 @@ func (h LogHandler) Handle(ctx context.Context, record slog.Record) error {
 	message := record.Message
 
 	// Ambil Request ID dari context (jika ada)
-	requestID, _ := ctx.Value("RequestID").(string)
+	requestID, _ := ctx.Value(constant.RequestID).(string)
 	if requestID != "" {
 		message = fmt.Sprintf("[Request ID: %s] %s", requestID, message)
 	}
@@ -46,7 +47,7 @@ func (h LogHandler) Handle(ctx context.Context, record slog.Record) error {
 	case slog.LevelDebug, slog.LevelInfo, slog.LevelWarn:
 		fmt.Fprintf(os.Stderr, "[%v] %v %v\n", record.Level, timestamp, message)
 	case slog.LevelError:
-		fmt.Fprintf(os.Stderr, "!!!ERROR!!! %v %v\n", timestamp, message)
+		fmt.Fprintf(os.Stderr, "%v !!!ERROR!!! %v %v\n", requestID, timestamp, message)
 	default:
 		panic("unreachable")
 	}

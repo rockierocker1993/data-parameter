@@ -23,35 +23,29 @@ func CreateLookupValue(c *gin.Context) {
 }
 
 func GetLookupValueByID(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	lookupValue, err := services.GetLookupValueByID(uint(id))
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Lookup value not found"})
-		return
-	}
-	c.JSON(http.StatusOK, lookupValue)
+	services.GetLookupValueByID(c)
 }
 
-func UpdateLookupValue(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	lookupValue, err := services.GetLookupValueByID(uint(id))
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Lookup Value not found"})
-		return
-	}
+// func UpdateLookupValue(c *gin.Context) {
+// 	id, _ := strconv.Atoi(c.Param("id"))
+// 	lookupValue, err := services.GetLookupValueByID(uint(id))
+// 	if err != nil {
+// 		c.JSON(http.StatusNotFound, gin.H{"error": "Lookup Value not found"})
+// 		return
+// 	}
 
-	if err := c.ShouldBindJSON(&lookupValue); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+// 	if err := c.ShouldBindJSON(&lookupValue); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
 
-	err = services.UpdateLookupValue(lookupValue)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update Lookup Value"})
-		return
-	}
-	c.JSON(http.StatusOK, lookupValue)
-}
+// 	err = services.UpdateLookupValue(lookupValue)
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update Lookup Value"})
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, lookupValue)
+// }
 
 func DeleteLookupValue(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))

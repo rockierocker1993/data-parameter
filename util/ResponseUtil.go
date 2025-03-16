@@ -36,7 +36,7 @@ func JSONResponse(c *gin.Context, statusCode int, response interface{}) {
 
 func ConstructResponse(c *gin.Context, code string, source string, data interface{}) dto.BaseResponse {
 	responseMessage, err := repositories.ResponseMessageFindByCodeAndSorce(code, source)
-	if err != nil {
+	if err == nil {
 		return dto.BaseResponse{
 			StatusCode: code,
 			RequestID:  c.Value(constant.RequestID).(string),
@@ -56,7 +56,7 @@ func ConstructResponse(c *gin.Context, code string, source string, data interfac
 			TitleEN:    constant.UknownErrorTitleId + fmt.Sprintf(" %v:%v", source, code),
 			DescID:     constant.UknownErrorDescId,
 			DescEN:     constant.UknownErrorDescEn,
-			Source:     source,
+			Source:     constant.Source,
 			Data:       data,
 		}
 	}

@@ -6,11 +6,14 @@ import (
 	"data-parameter/models"
 	"data-parameter/repositories"
 	"data-parameter/util"
+	"errors"
 	"log"
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func GetAllLookupValue() ([]dto.LookupValueDto, error) {
@@ -40,7 +43,7 @@ func CreateLookupValue(c *gin.Context) {
 	lookupValueExist, _ := repositories.GetLookupValueByKey(lookupValue.Key)
 	if lookupValueExist != nil {
 		log.Printf("Lookup value with key %v already exist", lookupValue.Key)
-		baseResponse := util.ConstructResponse(c, "PRMLV01", constant.Source, nil)
+		baseResponse := util.ConstructResponse(c, constant.PRMLV01, constant.Source, nil)
 		c.JSON(http.StatusBadRequest, baseResponse)
 		return
 	}
@@ -49,7 +52,7 @@ func CreateLookupValue(c *gin.Context) {
 	err := repositories.CreateLookupValue(&lookupValue)
 	if err != nil {
 		slog.Error("Failed to create lookup value", slog.Any("error", lookupValueDto))
-		baseResponse := util.ConstructResponse(c, "PRMLV02", constant.Source, nil)
+		baseResponse := util.ConstructResponse(c, constant.PRMLV02, constant.Source, nil)
 		c.JSON(http.StatusInternalServerError, baseResponse)
 	} else {
 		slog.Info("Lookup value created successfully")
@@ -59,8 +62,23 @@ func CreateLookupValue(c *gin.Context) {
 	}
 }
 
-func GetLookupValueByID(id uint) (*models.LookupValue, error) {
-	return repositories.GetLookupValueByID(id)
+func GetLookupValueByID(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	lookupValue, err := repositories.GetLookupValueByID(uint(id))
+	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+		slog.Info("Lookup Value with id %v not found", id)
+		baseResponse := util.ConstructResponse(c, constant.DATA_NOT_FOUND, constant.Source, nil)
+		c.JSON(http.StatusBadRequest, baseResponse)
+		return
+	} else if err != nil {
+		slog.Error("Failed to get lookup value by id", slog.Any("error", err))
+		baseResponse := util.ConstructResponse(c, constant.Failed, constant.Source, nil)
+		c.JSON(http.StatusBadRequest, baseResponse)
+		return
+	}
+	slog.Info("Lookup value created successfully")
+	baseResponse := util.ConstructResponse(c, constant.Success, constant.General, ToLookupValueDTO(lookupValue))
+	c.JSON(http.StatusBadRequest, baseResponse)
 }
 
 func GetLookupValueByKey(key string) (*models.LookupValue, error) {
