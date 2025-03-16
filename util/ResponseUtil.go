@@ -4,6 +4,8 @@ import (
 	"data-parameter/constant"
 	"data-parameter/dto"
 	"data-parameter/repositories"
+	"fmt"
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,17 +35,29 @@ func JSONResponse(c *gin.Context, statusCode int, response interface{}) {
 }
 
 func ConstructResponse(c *gin.Context, code string, source string, data interface{}) dto.BaseResponse {
-
-	responseMessage, _ := repositories.ResponseMessageFindByCodeAndSorce(code, source)
-
-	return dto.BaseResponse{
-		StatusCode: code,
-		RequestID:  c.GetHeader(constant.RequestID),
-		TitleID:    responseMessage.TitleId,
-		TitleEN:    responseMessage.TitleEn,
-		DescID:     responseMessage.MessageId,
-		DescEN:     responseMessage.MessageEn,
-		Source:     source,
-		Data:       data,
+	responseMessage, err := repositories.ResponseMessageFindByCodeAndSorce(code, source)
+	if err != nil {
+		return dto.BaseResponse{
+			StatusCode: code,
+			RequestID:  c.Value(constant.RequestID).(string),
+			TitleID:    responseMessage.TitleId,
+			TitleEN:    responseMessage.TitleEn,
+			DescID:     responseMessage.MessageId,
+			DescEN:     responseMessage.MessageEn,
+			Source:     source,
+			Data:       data,
+		}
+	} else {
+		slog.Error("Failed to get response message", slog.Any("error", err))
+		return dto.BaseResponse{
+			StatusCode: code,
+			RequestID:  c.Value(constant.RequestID).(string),
+			TitleID:    constant.UknownErrorTitleId + fmt.Sprintf(" %v:%v", source, code),
+			TitleEN:    constant.UknownErrorTitleId + fmt.Sprintf(" %v:%v", source, code),
+			DescID:     constant.UknownErrorDescId,
+			DescEN:     constant.UknownErrorDescEn,
+			Source:     source,
+			Data:       data,
+		}
 	}
 }

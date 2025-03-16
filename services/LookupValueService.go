@@ -49,7 +49,7 @@ func CreateLookupValue(c *gin.Context) {
 	err := repositories.CreateLookupValue(&lookupValue)
 	if err != nil {
 		slog.Error("Failed to create lookup value", slog.Any("error", lookupValueDto))
-		baseResponse := util.ConstructResponse(c, "PRMLV01", constant.Source, nil)
+		baseResponse := util.ConstructResponse(c, "PRMLV02", constant.Source, nil)
 		c.JSON(http.StatusInternalServerError, baseResponse)
 	} else {
 		slog.Info("Lookup value created successfully")
