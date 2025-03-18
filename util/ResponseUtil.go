@@ -44,7 +44,7 @@ func ConstructResponse(c *gin.Context, code string, source string, data interfac
 			TitleEN:    responseMessage.TitleEn,
 			DescID:     responseMessage.MessageId,
 			DescEN:     responseMessage.MessageEn,
-			Source:     source,
+			Source:     constant.Source,
 			Data:       data,
 		}
 	} else {

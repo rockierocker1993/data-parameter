@@ -19,7 +19,8 @@ func SetupRouter() *gin.Engine {
 		api.GET("/lookup-value", controllers.GetAllLookupValue)
 		api.POST("/lookup-value", controllers.CreateLookupValue)
 		api.GET("/lookup-value/:id", controllers.GetLookupValueByID)
-		//api.PUT("/lookup-value/:id", controllers.UpdateLookupValue)
+		api.GET("/lookup-value/key/:key", controllers.GetLookupValueByKey)
+		api.PUT("/lookup-value/:id", controllers.UpdateLookupValue)
 		api.DELETE("/lookup-value/:id", controllers.DeleteLookupValue)
 	}
 	return r
