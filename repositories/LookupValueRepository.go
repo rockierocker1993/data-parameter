@@ -25,14 +25,14 @@ func GetLookupValueByID(id uint) (*models.LookupValue, error) {
 	return &lookupValue, nil
 }
 
-func IsExistLookupValueByID(id uint) error {
-	var lookupValue models.LookupValue
-	result := config.DB.First(&lookupValue, id)
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
-}
+// func IsExistLookupValueByID(id uint) error {
+// 	var lookupValue models.LookupValue
+// 	result := config.DB.First(&lookupValue, id)
+// 	if result.Error != nil {
+// 		return result.Error
+// 	}
+// 	return nil
+// }
 
 func GetLookupValueByKey(key string) (*models.LookupValue, error) {
 	var lookupValue models.LookupValue

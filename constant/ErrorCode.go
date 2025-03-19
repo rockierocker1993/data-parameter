@@ -5,5 +5,6 @@ const (
 	Failed         string = "FAILED"
 	PRMLV01        string = "PRMLV01"
 	PRMLV02        string = "PRMLV02"
+	PRMLV03        string = "PRMLV03"
 	DATA_NOT_FOUND string = "DATA_NOT_FOUND"
 )
