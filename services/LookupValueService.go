@@ -36,19 +36,13 @@ func GetAllLookupValue(c *gin.Context) {
 func CreateLookupValue(c *gin.Context) {
 	slog.Info("in method CreateLookupValue")
 	var lookupValueDto dto.LookupValueDto
-	if err := c.ShouldBindJSON(&lookupValueDto); err != nil {
-		slog.Warn("Invalid request payload", slog.Any("error", err))
-		c.JSON(http.StatusBadRequest, util.ConstructResponse(c, constant.Failed, constant.Source, nil))
+
+	if valid := util.ValidateRequestSingleField(c, &dto.LookupValueDto{}, constant.LOOKUP_VALUE_PREFIX); !valid {
+		slog.Debug("Validation failed")
 		return
 	}
 
 	slog.Info("Creating new lookup value", slog.String("key", lookupValueDto.Key))
-
-	if lookupValueDto.Key == "" {
-		slog.Debug("Key is required but missing")
-		c.JSON(http.StatusBadRequest, util.ConstructResponse(c, constant.PRMLV03, constant.Source, nil))
-		return
-	}
 
 	if exists, _ := repositories.GetLookupValueByKey(lookupValueDto.Key); exists != nil {
 		slog.Debug("Lookup value with key already exists", slog.String("key", lookupValueDto.Key))
@@ -118,9 +112,8 @@ func UpdateLookupValue(c *gin.Context) {
 		return
 	}
 
-	if lookupValueDto.Key == "" {
-		slog.Debug("Key is required but missing")
-		c.JSON(http.StatusBadRequest, util.ConstructResponse(c, constant.PRMLV03, constant.Source, nil))
+	if valid := util.ValidateRequestSingleField(c, &dto.LookupValueDto{}, constant.LOOKUP_VALUE_PREFIX); !valid {
+		slog.Debug("Validation failed")
 		return
 	}
 
