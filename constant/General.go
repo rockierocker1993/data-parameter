@@ -9,4 +9,5 @@ const (
 	UknownErrorDescId   string = "Silahkan hubungi administrator untuk informasi lebih lanjut"
 	UknownErrorDescEn   string = "Please contact administrator for more information"
 	LOOKUP_VALUE_PREFIX string = "LOOKUP_VALUE"
+	SYSTEM_VALUE_PREFIX string = "SYSTEM_VALUE"
 )

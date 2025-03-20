@@ -22,6 +22,14 @@ func SetupRouter() *gin.Engine {
 		api.GET("/lookup-value/key/:key", controllers.GetLookupValueByKey)
 		api.PUT("/lookup-value/:id", controllers.UpdateLookupValue)
 		api.DELETE("/lookup-value/:id", controllers.DeleteLookupValue)
+
+		//system value api
+		api.GET("/system-value", controllers.GetAllSystemValue)
+		api.POST("/system-value", controllers.CreateSystemValue)
+		api.GET("/system-value/:id", controllers.GetSystemValueByID)
+		api.GET("/system-value/key/:key", controllers.GetSystemValueByKey)
+		api.PUT("/system-value/:id", controllers.UpdateSystemValue)
+		api.DELETE("/system-value/:id", controllers.DeleteSystemValue)
 	}
 	return r
 }
