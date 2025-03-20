@@ -27,9 +27,17 @@ func SetupRouter() *gin.Engine {
 		api.GET("/system-value", controllers.GetAllSystemValue)
 		api.POST("/system-value", controllers.CreateSystemValue)
 		api.GET("/system-value/:id", controllers.GetSystemValueByID)
-		api.GET("/system-value/key/:key", controllers.GetSystemValueByKey)
+		api.GET("/system-value/module/key/:module/:key", controllers.GetSystemValueByKey)
 		api.PUT("/system-value/:id", controllers.UpdateSystemValue)
 		api.DELETE("/system-value/:id", controllers.DeleteSystemValue)
+
+		//response message api
+		api.GET("/response-message", controllers.GetAllResponseMessage)
+		api.POST("/response-message", controllers.CreateResponseMessage)
+		api.GET("/response-message/:id", controllers.GetResponseMessageByID)
+		api.GET("/response-message/code/:code", controllers.GetResponseMessageByCode)
+		api.PUT("/response-message/:id", controllers.UpdateResponseMessage)
+		api.DELETE("/response-message/:id", controllers.DeleteResponseMessage)
 	}
 	return r
 }

@@ -44,8 +44,8 @@ func CreateSystemValue(c *gin.Context) {
 
 	slog.Info("Creating new System value", slog.String("key", SystemValueDto.Key))
 
-	if exists, _ := repositories.GetSystemValueByKey(SystemValueDto.Key); exists != nil {
-		slog.Debug("System value with key already exists", slog.String("key", SystemValueDto.Key))
+	if exists, _ := repositories.GetSystemValueByModuleAndKey(SystemValueDto.Module, SystemValueDto.Key); exists != nil {
+		slog.Debug("System value with module %v and key %v already exists", slog.String("key", SystemValueDto.Key), slog.String("key", SystemValueDto.Key))
 		c.JSON(http.StatusBadRequest, util.ConstructResponse(c, constant.PRMLV01, constant.Source, nil))
 		return
 	}
@@ -84,12 +84,14 @@ func GetSystemValueByID(c *gin.Context) {
 
 // GetSystemValueByKey retrieves a System value by its key.
 func GetSystemValueByKey(c *gin.Context) {
+	module := c.Param("module")
+	key := c.Param("key")
 	slog.Info("in method GetSystemValueByKey")
-	slog.Info("Retrieving System value", slog.Any("key", c.Param("key")))
-	SystemValue, err := repositories.GetSystemValueByKey(c.Param("key"))
+	slog.Info("Retrieving System value module %v key %v", module, key)
+	SystemValue, err := repositories.GetSystemValueByModuleAndKey(module, key)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			slog.Warn("System value not found", slog.Any("key", c.Param("key")))
+			slog.Warn("System value not found module %v key %v", module, key)
 			c.JSON(http.StatusBadRequest, util.ConstructResponse(c, constant.DATA_NOT_FOUND, constant.General, nil))
 			return
 		}
@@ -97,7 +99,7 @@ func GetSystemValueByKey(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, util.ConstructResponse(c, constant.Failed, constant.General, nil))
 		return
 	}
-	slog.Info("Successfully retrieved System value", slog.Any("key", c.Param("key")))
+	slog.Info("Successfully retrieved System value module %v key %v", module, key)
 	c.JSON(http.StatusOK, util.ConstructResponse(c, constant.Success, constant.General, ToSystemValueDTO(SystemValue)))
 }
 
@@ -129,8 +131,8 @@ func UpdateSystemValue(c *gin.Context) {
 		return
 	}
 
-	if err := repositories.IsExistSystemValueByKeyAndIdNot(SystemValueDto.Key, id); err == nil {
-		slog.Debug("Key already exists", slog.String("key", SystemValueDto.Key))
+	if err := repositories.IsExistSystemValueByModuleAndKeyAndIdNot(SystemValueDto.Module, SystemValueDto.Key, id); err == nil {
+		slog.Debug("module %v key %v already exists", SystemValueDto.Module, SystemValueDto.Key)
 		c.JSON(http.StatusBadRequest, util.ConstructResponse(c, constant.PRMLV01, constant.Source, nil))
 		return
 	}

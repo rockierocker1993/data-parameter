@@ -6,45 +6,45 @@ import (
 )
 
 func GetAllSystemValues() ([]models.SystemValue, error) {
-	var SystemValues []models.SystemValue
-	result := config.DB.Find(&SystemValues)
-	return SystemValues, result.Error
+	var systemValues []models.SystemValue
+	result := config.DB.Find(&systemValues)
+	return systemValues, result.Error
 }
 
-func CreateSystemValue(SystemValue *models.SystemValue) error {
-	result := config.DB.Create(SystemValue)
+func CreateSystemValue(systemValue *models.SystemValue) error {
+	result := config.DB.Create(systemValue)
 	return result.Error
 }
 
 func GetSystemValueByID(id uint) (*models.SystemValue, error) {
-	var SystemValue models.SystemValue
-	result := config.DB.First(&SystemValue, id)
+	var systemValue models.SystemValue
+	result := config.DB.First(&systemValue, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return &SystemValue, nil
+	return &systemValue, nil
 }
 
-func GetSystemValueByKey(key string) (*models.SystemValue, error) {
-	var SystemValue models.SystemValue
-	result := config.DB.First(&SystemValue, "key = ?", key)
+func GetSystemValueByModuleAndKey(module string, key string) (*models.SystemValue, error) {
+	var systemValue models.SystemValue
+	result := config.DB.First(&systemValue, "module = $1 AND key = $2", module, key)
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return &SystemValue, nil
+	return &systemValue, nil
 }
 
-func IsExistSystemValueByKeyAndIdNot(key string, id int) error {
-	var SystemValue models.SystemValue
-	result := config.DB.First(&SystemValue, "key = $1 AND ID !=$2", key, id)
+func IsExistSystemValueByModuleAndKeyAndIdNot(module string, key string, id int) error {
+	var systemValue models.SystemValue
+	result := config.DB.First(&systemValue, "module = $1 AND key = $2 AND ID !=$3", key, id)
 	if result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
 
-func UpdateSystemValue(SystemValue *models.SystemValue) error {
-	result := config.DB.Save(SystemValue)
+func UpdateSystemValue(systemValue *models.SystemValue) error {
+	result := config.DB.Save(systemValue)
 	return result.Error
 }
 
