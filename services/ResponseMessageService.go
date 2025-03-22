@@ -37,7 +37,7 @@ func CreateResponseMessage(c *gin.Context) {
 	slog.Info("in method CreateResponseMessage")
 	var ResponseMessageDto dto.ResponseMessageDto
 
-	if valid := util.ValidateRequestSingleField(c, &dto.ResponseMessageDto{}, constant.LOOKUP_VALUE_PREFIX); !valid {
+	if valid := util.ValidateRequestSingleField(c, &dto.ResponseMessageDto{}, constant.LOOKUP_VALUE); !valid {
 		slog.Debug("Validation failed")
 		return
 	}
@@ -112,7 +112,7 @@ func UpdateResponseMessage(c *gin.Context) {
 		return
 	}
 
-	if valid := util.ValidateRequestSingleField(c, &dto.ResponseMessageDto{}, constant.LOOKUP_VALUE_PREFIX); !valid {
+	if valid := util.ValidateRequestSingleField(c, &dto.ResponseMessageDto{}, constant.LOOKUP_VALUE); !valid {
 		slog.Debug("Validation failed")
 		return
 	}

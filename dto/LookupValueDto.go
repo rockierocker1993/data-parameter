@@ -6,4 +6,5 @@ type LookupValueDto struct {
 	Value  string `json:"value"`
 	TextId string `json:"text_id"`
 	TextEn string `json:"text_en"`
+	Order  int    `json:"order"`
 }

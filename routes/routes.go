@@ -38,6 +38,8 @@ func SetupRouter() *gin.Engine {
 		api.GET("/response-message/code/:code", controllers.GetResponseMessageByCode)
 		api.PUT("/response-message/:id", controllers.UpdateResponseMessage)
 		api.DELETE("/response-message/:id", controllers.DeleteResponseMessage)
+
+		api.GET("/reload-cache", controllers.ReloadCache)
 	}
 	return r
 }

@@ -39,6 +39,7 @@ CREATE TABLE lookup_values (
     value TEXT NOT NULL,
     text_id TEXT,
     text_en TEXT,
+    order INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL

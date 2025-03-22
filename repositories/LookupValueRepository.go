@@ -7,7 +7,13 @@ import (
 
 func GetAllLookupValues() ([]models.LookupValue, error) {
 	var lookupValues []models.LookupValue
-	result := config.DB.Find(&lookupValues)
+	result := config.DB.Order("order asc").Find(&lookupValues)
+	return lookupValues, result.Error
+}
+
+func GetAllLookupValuesByKey(key string) ([]models.LookupValue, error) {
+	var lookupValues []models.LookupValue
+	result := config.DB.Order("order asc").Find(&lookupValues).Where("key = ?", key)
 	return lookupValues, result.Error
 }
 
@@ -24,15 +30,6 @@ func GetLookupValueByID(id uint) (*models.LookupValue, error) {
 	}
 	return &lookupValue, nil
 }
-
-// func IsExistLookupValueByID(id uint) error {
-// 	var lookupValue models.LookupValue
-// 	result := config.DB.First(&lookupValue, id)
-// 	if result.Error != nil {
-// 		return result.Error
-// 	}
-// 	return nil
-// }
 
 func GetLookupValueByKey(key string) (*models.LookupValue, error) {
 	var lookupValue models.LookupValue

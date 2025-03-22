@@ -37,7 +37,7 @@ func CreateLookupValue(c *gin.Context) {
 	slog.Info("in method CreateLookupValue")
 	var lookupValueDto dto.LookupValueDto
 
-	if valid := util.ValidateRequestSingleField(c, &dto.LookupValueDto{}, constant.LOOKUP_VALUE_PREFIX); !valid {
+	if valid := util.ValidateRequestSingleField(c, &dto.LookupValueDto{}, constant.LOOKUP_VALUE); !valid {
 		slog.Debug("Validation failed")
 		return
 	}
@@ -112,7 +112,7 @@ func UpdateLookupValue(c *gin.Context) {
 		return
 	}
 
-	if valid := util.ValidateRequestSingleField(c, &dto.LookupValueDto{}, constant.LOOKUP_VALUE_PREFIX); !valid {
+	if valid := util.ValidateRequestSingleField(c, &dto.LookupValueDto{}, constant.LOOKUP_VALUE); !valid {
 		slog.Debug("Validation failed")
 		return
 	}

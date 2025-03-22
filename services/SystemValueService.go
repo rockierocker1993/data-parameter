@@ -37,7 +37,7 @@ func CreateSystemValue(c *gin.Context) {
 	slog.Info("in method CreateSystemValue")
 	var SystemValueDto dto.SystemValueDto
 
-	if valid := util.ValidateRequestSingleField(c, &dto.SystemValueDto{}, constant.SYSTEM_VALUE_PREFIX); !valid {
+	if valid := util.ValidateRequestSingleField(c, &dto.SystemValueDto{}, constant.SYSTEM_VALUE); !valid {
 		slog.Debug("Validation failed")
 		return
 	}
@@ -114,7 +114,7 @@ func UpdateSystemValue(c *gin.Context) {
 		return
 	}
 
-	if valid := util.ValidateRequestSingleField(c, &dto.SystemValueDto{}, constant.SYSTEM_VALUE_PREFIX); !valid {
+	if valid := util.ValidateRequestSingleField(c, &dto.SystemValueDto{}, constant.SYSTEM_VALUE); !valid {
 		slog.Debug("Validation failed")
 		return
 	}
