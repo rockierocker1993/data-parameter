@@ -26,12 +26,18 @@ func GetSystemValueByID(id uint) (*models.SystemValue, error) {
 }
 
 func GetSystemValueByModuleAndKey(module string, key string) (*models.SystemValue, error) {
-	var systemValue models.SystemValue
-	result := config.DB.First(&systemValue, "module = $1 AND key = $2", module, key)
+	var systemValues models.SystemValue
+	result := config.DB.First(&systemValues, "module = $1 AND key = $2", module, key)
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return &systemValue, nil
+	return &systemValues, nil
+}
+
+func GetSystemValueByModule(module string) ([]models.SystemValue, error) {
+	var systemValues []models.SystemValue
+	result := config.DB.Find(&systemValues, "module = $1", module)
+	return systemValues, result.Error
 }
 
 func IsExistSystemValueByModuleAndKeyAndIdNot(module string, key string, id int) error {
